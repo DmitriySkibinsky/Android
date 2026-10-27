@@ -26,6 +26,11 @@
             android:name=".EditNoteActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".DetailActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
     </application>
 
 </manifest>
