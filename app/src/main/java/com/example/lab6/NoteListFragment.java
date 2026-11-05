@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -20,20 +20,20 @@ public class NoteListFragment extends Fragment {
         void onNoteSelected(int position);
     }
 
-    private OnNoteSelectedListener listener;
+    public interface OnNoteCheckedListener {
+        void onNoteChecked(int position, boolean isChecked);
+    }
+
+    private OnNoteSelectedListener selectedListener;
+    private OnNoteCheckedListener checkedListener;
     private ArrayList<Note> notes = new ArrayList<>();
-    private ArrayAdapter<Note> adapter;
-    private ListView listView;
+    private NotesAdapter adapter;
+    private RecyclerView recyclerView;
 
     public void setNotes(ArrayList<Note> notes) {
         this.notes = notes != null ? notes : new ArrayList<>();
         if (adapter != null) {
-            // Пересоздаём адаптер с актуальным списком
-            adapter = new ArrayAdapter<>(requireContext(),
-                    android.R.layout.simple_list_item_1, this.notes);
-            if (listView != null) {
-                listView.setAdapter(adapter);
-            }
+            adapter.setNotes(this.notes);
         }
     }
 
@@ -47,9 +47,12 @@ public class NoteListFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         if (context instanceof OnNoteSelectedListener) {
-            listener = (OnNoteSelectedListener) context;
+            selectedListener = (OnNoteSelectedListener) context;
         } else {
             throw new RuntimeException(context + " must implement OnNoteSelectedListener");
+        }
+        if (context instanceof OnNoteCheckedListener) {
+            checkedListener = (OnNoteCheckedListener) context;
         }
     }
 
@@ -59,15 +62,25 @@ public class NoteListFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_note_list, container, false);
-        listView = view.findViewById(R.id.listViewNotes);
+        recyclerView = view.findViewById(R.id.recyclerViewNotes);
 
-        adapter = new ArrayAdapter<>(requireContext(),
-                android.R.layout.simple_list_item_1, notes);
-        listView.setAdapter(adapter);
+        adapter = new NotesAdapter(notes);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recyclerView.setAdapter(adapter);
 
-        listView.setOnItemClickListener((parent, v, position, id) -> {
-            if (listener != null) {
-                listener.onNoteSelected(position);
+        adapter.setOnNoteClickListener(position -> {
+            if (selectedListener != null) {
+                selectedListener.onNoteSelected(position);
+            }
+        });
+
+        adapter.setOnNoteCheckedChangeListener((position, isChecked) -> {
+            if (checkedListener != null) {
+                checkedListener.onNoteChecked(position, isChecked);
+            } else if (position >= 0 && position < notes.size()) {
+                // На случай, если Activity не реализует интерфейс — всё равно сохраняем
+                notes.get(position).completed = isChecked;
+                adapter.notifyItemChanged(position);
             }
         });
 
@@ -77,6 +90,7 @@ public class NoteListFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        listener = null;
+        selectedListener = null;
+        checkedListener = null;
     }
 }

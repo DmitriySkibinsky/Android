@@ -3,31 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:padding="16dp">
+    android:paddingTop="48dp"
+    android:fitsSystemWindows="true"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="16dp">
 
-    <!-- Левая часть: список + кнопка добавления -->
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/list_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical"
-        android:layout_marginEnd="12dp">
+        android:layout_marginEnd="12dp" />
 
-        <FrameLayout
-            android:id="@+id/list_container"
-            android:layout_width="match_parent"
-            android:layout_height="298dp"
-            android:layout_weight="1" />
-
-        <Button
-            android:id="@+id/btnAddNote"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Добавить заметку" />
-    </LinearLayout>
-
-    <!-- Правая часть: детали заметки -->
     <FrameLayout
         android:id="@+id/detail_container"
         android:layout_width="0dp"

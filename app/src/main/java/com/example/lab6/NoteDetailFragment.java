@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,27 +16,32 @@ public class NoteDetailFragment extends Fragment {
 
     private static final String ARG_TITLE = "title";
     private static final String ARG_DESCRIPTION = "description";
+    private static final String ARG_COMPLETED = "completed";
     private static final String ARG_POSITION = "position";
 
     private TextView tvTitle;
     private TextView tvDescription;
+    private CheckBox cbCompleted;
     private Button btnEdit;
 
     private String title = "";
     private String description = "";
+    private boolean completed = false;
     private int position = -1;
 
     public interface OnEditNoteListener {
-        void onEditNote(int position, String title, String description);
+        void onEditNote(int position, String title, String description, boolean completed);
     }
 
     private OnEditNoteListener editListener;
 
-    public static NoteDetailFragment newInstance(String title, String description, int position) {
+    public static NoteDetailFragment newInstance(String title, String description,
+                                                 boolean completed, int position) {
         NoteDetailFragment fragment = new NoteDetailFragment();
         Bundle args = new Bundle();
         args.putString(ARG_TITLE, title);
         args.putString(ARG_DESCRIPTION, description);
+        args.putBoolean(ARG_COMPLETED, completed);
         args.putInt(ARG_POSITION, position);
         fragment.setArguments(args);
         return fragment;
@@ -47,6 +53,7 @@ public class NoteDetailFragment extends Fragment {
         if (getArguments() != null) {
             title = getArguments().getString(ARG_TITLE, "");
             description = getArguments().getString(ARG_DESCRIPTION, "");
+            completed = getArguments().getBoolean(ARG_COMPLETED, false);
             position = getArguments().getInt(ARG_POSITION, -1);
         }
     }
@@ -60,17 +67,20 @@ public class NoteDetailFragment extends Fragment {
 
         tvTitle = view.findViewById(R.id.tvTitle);
         tvDescription = view.findViewById(R.id.tvDescription);
+        cbCompleted = view.findViewById(R.id.cbCompleted);
         btnEdit = view.findViewById(R.id.btnEdit);
 
-        updateContent(title, description);
+        updateContent(title, description, completed);
+
+        // В режиме просмотра чекбокс только для отображения (нередактируемый)
+        cbCompleted.setEnabled(false);
 
         btnEdit.setOnClickListener(v -> {
             if (editListener != null && position >= 0) {
-                editListener.onEditNote(position, title, description);
+                editListener.onEditNote(position, title, description, completed);
             }
         });
 
-        // Если фрагмент встроен в Activity, которая реализует интерфейс
         if (getActivity() instanceof OnEditNoteListener) {
             editListener = (OnEditNoteListener) getActivity();
         }
@@ -78,15 +88,19 @@ public class NoteDetailFragment extends Fragment {
         return view;
     }
 
-    public void updateContent(String title, String description) {
+    public void updateContent(String title, String description, boolean completed) {
         this.title = title != null ? title : "";
         this.description = description != null ? description : "";
+        this.completed = completed;
 
         if (tvTitle != null) {
             tvTitle.setText(this.title);
         }
         if (tvDescription != null) {
             tvDescription.setText(this.description);
+        }
+        if (cbCompleted != null) {
+            cbCompleted.setChecked(this.completed);
         }
     }
 

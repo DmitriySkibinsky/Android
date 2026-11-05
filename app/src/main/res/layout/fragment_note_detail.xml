@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Название:"
+        android:text="@string/label_title"
         android:textStyle="bold" />
 
     <TextView
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="Описание:"
+        android:text="@string/label_description"
         android:textStyle="bold" />
 
     <TextView
@@ -37,11 +37,19 @@
         android:textSize="14sp"
         android:gravity="top" />
 
+    <CheckBox
+        android:id="@+id/cbCompleted"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/note_completed"
+        android:minHeight="48dp" />
+
     <Button
         android:id="@+id/btnEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="Редактировать" />
+        android:text="@string/edit" />
 
 </LinearLayout>

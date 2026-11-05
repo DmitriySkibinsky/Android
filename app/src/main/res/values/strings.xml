@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Lab6</string>
+    <string name="add_note">Добавить заметку</string>
+    <string name="note_icon">Иконка заметки</string>
+    <string name="note_completed">Выполнено</string>
+    <string name="label_title">Название:</string>
+    <string name="label_description">Описание:</string>
+    <string name="hint_title">Введите название</string>
+    <string name="hint_description">Введите описание</string>
+    <string name="save">Сохранить</string>
+    <string name="edit">Редактировать</string>
 </resources>

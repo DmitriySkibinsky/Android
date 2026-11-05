@@ -8,14 +8,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Название:"
+        android:text="@string/label_title"
         android:textStyle="bold" />
 
     <EditText
         android:id="@+id/etTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Введите название"
+        android:hint="@string/hint_title"
         android:inputType="text"
         android:minHeight="48dp" />
 
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Описание:"
+        android:text="@string/label_description"
         android:textStyle="bold" />
 
     <EditText
@@ -32,15 +32,23 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="top"
-        android:hint="Введите описание"
+        android:hint="@string/hint_description"
         android:inputType="textMultiLine"
         android:minLines="5" />
+
+    <CheckBox
+        android:id="@+id/cbCompleted"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/note_completed"
+        android:minHeight="48dp" />
 
     <Button
         android:id="@+id/btnSave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Сохранить" />
+        android:text="@string/save" />
 
 </LinearLayout>
